@@ -7,6 +7,7 @@ Created on Mon Oct 23 22:35:58 2017
 """
 
 from sympy import *
+import tf
 
 def R_x(q):
     M_x = Matrix([[ 1,      0,       0],
@@ -86,33 +87,35 @@ R_Y = Matrix([[0, 0, -1, 0],
               [1, 0,  0, 0],
               [0, 0,  0, 1]])
 
-R_corr = R_Z*R_Y # intrinsic rotation = post
+T_corr = R_Z*R_Y # intrinsic rotation = post
 
 ### Numerically evaluate transforms
+#s_dict = {q1: 0, q2: 0, q3: 0, q4: 0, q5: 0, q6: 0} #test_initial
+#s_dict = {q1: -0.65, q2: 0.45, q3: -0.35, q4: 0.91, q5: 0.78, q6: 0.5} #test_1
+#s_dict = {q1: -0.79, q2: -0.11, q3: -2.33, q4: 1.94, q5: 1.14, q6: -3.68} #test_2
+s_dict = {q1: -2.99, q2: -0.12, q3: 0.94, q4: 4.06, q5: 1.29, q6: -4.12} #test_3
 ### (compared with the output of tf_echo)
 print('\nT0_1 =\n')
-pprint(T0_1.evalf(subs={q1: 0, q2: 0, q3: 0, q4: 0, q5: 0, q6: 0}))
+pprint(T0_1.evalf(subs=s_dict))
 print('\nT0_2 =\n')
-pprint(T0_2.evalf(subs={q1: 0, q2: 0, q3: 0, q4: 0, q5: 0, q6: 0}))
+pprint(T0_2.evalf(subs=s_dict))
 print('\nT0_3 =\n')
-pprint(T0_3.evalf(subs={q1: 0, q2: 0, q3: 0, q4: 0, q5: 0, q6: 0}))
+pprint(T0_3.evalf(subs=s_dict))
 print('\nT0_4 =\n')
-pprint(T0_4.evalf(subs={q1: 0, q2: 0, q3: 0, q4: 0, q5: 0, q6: 0}))
+pprint(T0_4.evalf(subs=s_dict))
 print('\nT0_5 = \n')
-pprint(T0_5.evalf(subs={q1: 0, q2: 0, q3: 0, q4: 0, q5: 0, q6: 0}))
+pprint(T0_5.evalf(subs=s_dict))
 print('\nT0_6 =\n')
-pprint(T0_6.evalf(subs={q1: 0, q2: 0, q3: 0, q4: 0, q5: 0, q6: 0}))
+pprint(T0_6.evalf(subs=s_dict))
 print('\nT0_7 =\n')
-pprint(T0_7.evalf(subs={q1: 0, q2: 0, q3: 0, q4: 0, q5: 0, q6: 0}))
+pprint(T0_7.evalf(subs=s_dict))
 
 ### The corrected homogeneous tform from the base link to the end
 ### effector
-T_total = T0_7*R_corr
-print('\nT0_7 =\n')
-pprint(T_total.evalf(subs={q1: 0, q2: 0, q3: 0, q4: 0, q5: 0, q6: 0}))
-print(R_corr)
+T_total = T0_7*T_corr
+print('\nT0_7_corrected =\n')
+pprint(T_total.evalf(subs=s_dict))
 
-#R_test = T3_4*T4_5*T5_6
-#R_test = R_x(q4)*R_y(q5)*R_x(q6)
-R_test = T0_3.evalf(subs={q1: 1, q2: .3, q3: .2})
-R0_3 = T0_3[0:3,0:3]
+print('\nRotation Matrix from Simulation = \n')
+R = tf.transformations.quaternion_matrix([0.02178, -0.2086, 0.9059, 0.3678])
+print(R)

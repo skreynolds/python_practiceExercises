@@ -119,3 +119,6 @@ pprint(T_total.evalf(subs=s_dict))
 print('\nRotation Matrix from Simulation = \n')
 R = tf.transformations.quaternion_matrix([0.02178, -0.2086, 0.9059, 0.3678])
 print(R)
+
+print('\nThe transformation from 0 to 3:\n')
+pprint(T3_4*T4_5*T5_6)
